@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Caixes</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>	
+</head>
+<body>
+    
+	
+    <script>
+	// Aquesta funci� ser� cridada quan s'hagui carregat tot el document 
+    $( document ).ready(function() { 
+		//Fem la crida ajax per obtindre un fitxer json
+		$.getJSON( "caixes", function( data ) {
+			//Per a cada element dins de data
+			$.each( data, function( i) {
+				//Creem un div
+				caixa = document.createElement( "div" );
+				//Li assignem totes les propietats
+				caixa.id = "caixa" + data[i].id;
+				caixa.style.backgroundColor  = data[i].color;
+				caixa.style.position = "fixed";
+				caixa.style.left =  data[i].x + "px";
+				caixa.style.top =  data[i].y + "px";
+				caixa.style.width = data[i].width + "px";
+				caixa.style.height = data[i].height + "px";
+				caixa.setAttribute("class", "moviment");
+				//Afegim el div al body
+				$( "body" ).append( caixa );
+				//Sel�leccionem tots els elements que tinguin class = moviment i els fem draggables
+				$( ".moviment" ).draggable();		
+			});
+		});
+	});
+
+    </script>
+	
+</body>
+</html>

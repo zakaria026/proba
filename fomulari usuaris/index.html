@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Caixes</title>
+</head>
+<body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <script>
+	// Aquesta funció serà cridada quan s'hagui carregat tot el document 
+    $( document ).ready(function() { 
+		//Fem la crida ajax per obtindre un fitxer json
+		$.getJSON( "getCaixes", function( data ) {
+			//Per a cada element dins de data
+			$.each( data, function( i) {
+				//Creem un div
+				caixa = document.createElement( "div" );
+				//Li assignem totes les propietats
+				caixa.id = "caixa" + data[i].id;
+				caixa.style.backgroundColor  = data[i].color;
+				caixa.style.position = "fixed";
+				caixa.style.left =  data[i].x + "px";
+				caixa.style.top =  data[i].y + "px";
+				caixa.style.width = data[i].width + "px";
+				caixa.style.height = data[i].height + "px";
+				caixa.setAttribute("class", "moviment");
+				//Afegim el div al body
+				$( "body" ).append( caixa );
+				$( ".moviment" ).draggable(); 				//Sel·leccionem tots els elements que tinguin class = moviment i els fem draggables
+				$(caixa).mouseup(function() { //Afegim un event a la caixa per quan deixem el boto del ratoli
+					console.log("S'ha mogut la caixa:" + this.id);
+					let dades = { //Empaquetem les 3 variables que necessitem enviar en un objecte
+						id : this.id,
+						top: this.style.top,
+						left: this.style.left
+					};
+					$.get( "canviCaixa", dades );//Peticio ajax enviant les dades per GET
+					
+				});				
+			});
+		});
+		
+	});
+
+    </script>
+	
+</body>
+</html>
